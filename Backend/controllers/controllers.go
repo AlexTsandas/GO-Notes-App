@@ -3,23 +3,18 @@ package controllers
 import (
 	"context"
 
+	"github.com/AlexTsandas/GO-Notes-App/models"
 	"github.com/gofiber/fiber/v2"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type Todo struct {
-	ID        primitive.ObjectID `json:"_id,omitempty" bson:"_id,omitempty"`
-	Body      string             `json:"body"`
-	Completed bool               `json:"completed"`
-}
-
 // main.go sets this once before starting the server.
 var Collection *mongo.Collection
 
 func GetTodos(c *fiber.Ctx) error {
-	var todos []Todo
+	var todos []models.Todo
 
 	cursor, err := Collection.Find(context.Background(), bson.M{})
 	if err != nil {
@@ -28,7 +23,7 @@ func GetTodos(c *fiber.Ctx) error {
 	defer cursor.Close(context.Background())
 
 	for cursor.Next(context.Background()) {
-		var todo Todo
+		var todo models.Todo
 		if err := cursor.Decode(&todo); err != nil {
 			return err
 		}
@@ -43,7 +38,7 @@ func GetTodos(c *fiber.Ctx) error {
 }
 
 func CreateTodos(c *fiber.Ctx) error {
-	todo := new(Todo)
+	todo := new(models.Todo)
 
 	if err := c.BodyParser(todo); err != nil {
 		return err
