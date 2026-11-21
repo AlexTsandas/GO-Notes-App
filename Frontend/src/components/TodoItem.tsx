@@ -1,10 +1,58 @@
 // STARTER CODE:
 
-import { Badge, Box, Flex, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import type { Todo } from "./TodoList";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { BASE_URL } from "../App";
+const TodoItem = ({ todo }: { todo: Todo }) => {
+  const queryClient = useQueryClient();
+	const {mutate: updateTodo,isPending: isUpdating} = useMutation({
+    mutationKey: ["updateTodo"],
+		mutationFn: async () => {
+			if (todo.completed) return alert("Todo is already completed!");
+			try{
+				const res = await fetch(BASE_URL + `/todos/${todo._id}`, {
+				method: "PATCH",
+			})
+			const data = await res.json();
+			if (!res.ok) {
+				throw new Error(data.error || "Failed to update todo");
+			}
+			return data;
+		}catch (error) {
+			console.log(error);
+		}
+	 },
+	 onSuccess: () => {
+		queryClient.invalidateQueries({ queryKey: ["todos"] });
+	 }
+	})
 
-const TodoItem = ({ todo }: { todo: any }) => {
+	const {mutate: deleteTodo , isPending: isDeleting} = useMutation({
+		mutationKey: ["deleteTodo"],
+		mutationFn: async () => {
+			try{
+				const res = await fetch(BASE_URL + `/todos/${todo._id}`, {
+					method: "DELETE",
+				});
+				const data = await res.json();
+				if (!res.ok) {
+					throw new Error(data.error || "Failed to delete todo");
+				}
+				return data;
+			}catch (error) {
+				console.log(error);
+			}
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["todos"] });
+		},
+		onError: (error: any) => {
+			console.log(error);
+		}
+	});
 	return (
 		<Flex gap={2} alignItems={"center"}>
 			<Flex
@@ -34,11 +82,11 @@ const TodoItem = ({ todo }: { todo: any }) => {
 				)}
 			</Flex>
 			<Flex gap={2} alignItems={"center"}>
-				<Box color={"green.500"} cursor={"pointer"}>
-					<FaCheckCircle size={20} />
+				<Box color={"green.500"} cursor={"pointer"} onClick={() => updateTodo()}>
+					{isUpdating ? <Spinner size="sm" /> : <FaCheckCircle size={20} />}
 				</Box>
-				<Box color={"red.500"} cursor={"pointer"}>
-					<MdDelete size={25} />
+				<Box color={"red.500"} cursor={"pointer"} onClick={() => deleteTodo()}>
+					{isDeleting ? <Spinner size="sm" /> : <MdDelete size={25} />}
 				</Box>
 			</Flex>
 		</Flex>
