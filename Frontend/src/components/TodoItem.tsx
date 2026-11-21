@@ -1,12 +1,17 @@
 // STARTER CODE:
 
-import { Badge, Box, Flex, Spinner, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, Spinner, Text, useColorModeValue } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import type { Todo } from "./TodoList";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { BASE_URL } from "../App";
 const TodoItem = ({ todo }: { todo: Todo }) => {
+  const textColor = useColorModeValue(
+    todo.completed ? "green.700" : "cyan.800",
+    todo.completed ? "green.200" : "yellow.100"
+  );
+  const pendingBadgeColor = useColorModeValue("cyan", "yellow");
   const queryClient = useQueryClient();
 	const {mutate: updateTodo,isPending: isUpdating} = useMutation({
     mutationKey: ["updateTodo"],
@@ -65,7 +70,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
 				justifyContent={"space-between"}
 			>
 				<Text
-					color={todo.completed ? "green.200" : "yellow.100"}
+					color={textColor}
 					textDecoration={todo.completed ? "line-through" : "none"}
 				>
 					{todo.body}
@@ -76,7 +81,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
 					</Badge>
 				)}
 				{!todo.completed && (
-					<Badge ml='1' colorScheme='yellow'>
+					<Badge ml='1' colorScheme={pendingBadgeColor}>
 						In Progress
 					</Badge>
 				)}

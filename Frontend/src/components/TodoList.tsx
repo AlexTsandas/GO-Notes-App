@@ -1,4 +1,4 @@
-import { Flex, Spinner, Stack, Text } from "@chakra-ui/react";
+import { Flex, Spinner, Stack, Text, useColorModeValue } from "@chakra-ui/react";
 import TodoItem from "./TodoItem";
 import {useQuery}   from "@tanstack/react-query";
 import { BASE_URL } from "../App";
@@ -9,6 +9,11 @@ export type Todo = {
 };
 
 const TodoList = () => {
+  const headingGradient = useColorModeValue(
+    "linear(to-l, blue.600, cyan.800)",
+    "linear(to-l, #0b85f8, #00ffff)"
+  );
+  const emptyStateColor = useColorModeValue("gray.600", "gray.500");
   const { data: todos , isLoading } = useQuery<Todo[]>({
     queryKey: ["todos"],
 
@@ -32,7 +37,7 @@ const TodoList = () => {
        fontWeight={"bold"}
        textAlign={"center"}
        my={2}
-       bgGradient="linear(to-l, #0b85f8, #00ffff)"
+       bgGradient={headingGradient}
         bgClip="text" >
         Today's Tasks
       </Text>
@@ -43,7 +48,7 @@ const TodoList = () => {
       )}
       {!isLoading && todos?.length === 0 && (
         <Stack alignItems={"center"} gap='3'>
-          <Text fontSize={"xl"} textAlign={"center"} color={"gray.500"}>
+          <Text fontSize={"xl"} textAlign={"center"} color={emptyStateColor}>
             All tasks completed! 🤞
           </Text>
           <img src='/go.png' alt='Go logo' width={70} height={70} />
