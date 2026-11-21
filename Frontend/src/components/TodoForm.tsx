@@ -7,7 +7,6 @@ import { BASE_URL } from "../App";
 
 const TodoForm = () => {
 	const [newTodo, setNewTodo] = useState("");
-	const [isPending, setIsPending] = useState(false);
   
   const queryClient = useQueryClient();
 
@@ -48,7 +47,7 @@ const TodoForm = () => {
 					type='text'
 					value={newTodo}
 					onChange={(e) => setNewTodo(e.target.value)}
-					ref={(input) => input && input.focus()}
+					ref={(input) => { input?.focus(); }}
 				/>
 				<Button
 					mx={2}
