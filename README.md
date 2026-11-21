@@ -1,20 +1,18 @@
 # Go Notes App
 
-A simple practice project to learn how to write backend code with Go and Fiber v2 and also test deployment on Railway. I am coming from Node.js and Express and using this project to understand Go handlers, requests, responses, and APIs.
+A simple full-stack todo app built for practice. Coming from Node.js and Express, I used this project to learn backend development with Go and Fiber v2 and test deployment on Railway.
 
-## Progress
+Create, view, complete, and delete todos through the React frontend, with data stored in MongoDB Atlas. The app is deployed on Railway.
 
-- Backend API completed with MongoDB persistence.
-- Frontend UI design and components completed using sample data.
-- Next: connect the frontend to the backend to list, create, complete, and delete todos from the UI.
-- Then: deploy the application on Railway.
+**Live preview:** [Go Notes App](https://go-notes-app-production-4b637812.up.railway.app)
 
 ## Tech stack
 
 - **Backend:** Go, Fiber v2.
-- **Frontend:** React, TypeScript, Vite, Chakra UI, React Icons.
+- **Frontend:** React, TypeScript, Vite, Chakra UI, React Icons, TanStack Query.
 - **Database:** MongoDB Atlas.
 - **Development:** Air for automatic backend rebuilds.
+- **Deployment:** Docker, Railway.
 
 ## API endpoints
 
